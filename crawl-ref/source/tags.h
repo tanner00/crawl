@@ -160,7 +160,7 @@ bool        unmarshallBoolean (reader &);
 string      unmarshallString  (reader &);
 void        unmarshallString4 (reader &, string&);
 coord_def   unmarshallCoord   (reader &);
-void        unmarshallItem    (reader &, item_def &item);
+void        unmarshallItem    (reader &, item_def &item, bool curse_ok = false);
 void        unmarshallMonster (reader &, monster& item);
 dungeon_feature_type unmarshallFeatureType(reader &);
 level_id    unmarshall_level_id(reader& th);

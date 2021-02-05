@@ -3910,7 +3910,7 @@ static void _tag_read_you_items(reader &th)
     for (int i = 0; i < count; ++i)
     {
         item_def &it = you.inv[i];
-        unmarshallItem(th, it);
+        unmarshallItem(th, it, you_worship(GOD_ASHENZARI));
 #if TAG_MAJOR_VERSION == 34
         // Fixups for actual items.
         if (it.defined())
@@ -4659,7 +4659,7 @@ static void _fixup_dragon_artefact_name(item_def &item, string name_key)
 }
 #endif
 
-void unmarshallItem(reader &th, item_def &item)
+void unmarshallItem(reader &th, item_def &item, bool curse_ok)
 {
     item.base_type   = static_cast<object_class_type>(unmarshallByte(th));
     if (item.base_type == OBJ_UNASSIGNED)
@@ -5166,8 +5166,8 @@ void unmarshallItem(reader &th, item_def &item)
     if (item.base_type == OBJ_WANDS && item.charges < 0)
         item.charges = 0;
 
-    if (item.base_type == OBJ_RODS && item.cursed())
-        do_uncurse_item(item); // rods can't be cursed anymore
+    if (th.getMinorVersion() < TAG_MINOR_UNCURSE && !curse_ok && item.cursed())
+        do_uncurse_item(item);
 
     // turn old hides into the corresponding armour
     static const map<int, armour_type> hide_to_armour = {
