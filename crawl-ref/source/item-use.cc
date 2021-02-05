@@ -2879,6 +2879,8 @@ string cannot_read_item_reason(const item_def &item)
             return _no_items_reason(OSEL_ENCHANTABLE_WEAPON, true);
 
         case SCR_IDENTIFY:
+            if (have_passive(passive_t::want_curses))
+                return _no_items_reason(OSEL_CURSED_WORN);
             return _no_items_reason(OSEL_UNIDENT, true);
 
 #if TAG_MAJOR_VERSION == 34
@@ -3236,7 +3238,10 @@ void read_scroll(item_def& scroll)
             // Do this here so it doesn't turn up in the ID menu.
             set_ident_type(scroll, true);
         }
-        cancel_scroll = !_identify(alreadyknown, pre_succ_msg, link);
+        if (have_passive(passive_t::want_curses))
+            cancel_scroll = !remove_curse(alreadyknown, alreadyknown ? pre_succ_msg : "");
+        else
+            cancel_scroll = !_identify(alreadyknown, pre_succ_msg, link);
         break;
 
     case SCR_ENCHANT_ARMOUR:
