@@ -2775,7 +2775,6 @@ static bool _is_cancellable_scroll(scroll_type scroll)
            || scroll == SCR_BLINKING
            || scroll == SCR_ENCHANT_ARMOUR
            || scroll == SCR_AMNESIA
-           || scroll == SCR_REMOVE_CURSE
 #if TAG_MAJOR_VERSION == 34
            || scroll == SCR_CURSE_ARMOUR
            || scroll == SCR_CURSE_JEWELLERY
@@ -2881,9 +2880,6 @@ string cannot_read_item_reason(const item_def &item)
 
         case SCR_IDENTIFY:
             return _no_items_reason(OSEL_UNIDENT, true);
-
-        case SCR_REMOVE_CURSE:
-            return _no_items_reason(OSEL_CURSED_WORN);
 
 #if TAG_MAJOR_VERSION == 34
         case SCR_CURSE_WEAPON:
@@ -3097,16 +3093,6 @@ void read_scroll(item_def& scroll)
 
     case SCR_TELEPORTATION:
         you_teleport();
-        break;
-
-    case SCR_REMOVE_CURSE:
-        if (!alreadyknown)
-        {
-            mpr(pre_succ_msg);
-            remove_curse(false);
-        }
-        else
-            cancel_scroll = !remove_curse(true, pre_succ_msg);
         break;
 
     case SCR_ACQUIREMENT:
