@@ -817,6 +817,10 @@ static bool _cmd_is_repeatable(command_type cmd, bool is_again = false)
         mpr("You can't repeat that command.");
         return false;
 
+    case CMD_OPTIONS:
+        mpr("You can't repeat that command.");
+        return false;
+
     case CMD_DISPLAY_MAP:
         mpr("You can't repeat map commands.");
         return false;
@@ -2181,6 +2185,12 @@ void process_command(command_type cmd, command_type prev_cmd)
     case CMD_LUA_CONSOLE:
         debug_terp_dlua(clua);
         break;
+
+    case CMD_OPTIONS:
+    {
+        canned_msg(MSG_CANNOT_SEE);
+        break;
+    }
 
 #ifdef TOUCH_UI
     case CMD_SHOW_KEYBOARD:
