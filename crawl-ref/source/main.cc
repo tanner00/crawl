@@ -107,6 +107,7 @@
 #include "nearby-danger.h"
 #include "notes.h"
 #include "options.h"
+#include "options-menu.h"
 #include "output.h"
 #include "player.h"
 #include "player-reacts.h"
@@ -2187,10 +2188,10 @@ void process_command(command_type cmd, command_type prev_cmd)
         break;
 
     case CMD_OPTIONS:
-    {
-        canned_msg(MSG_CANNOT_SEE);
+        display_options_menu();
+        redraw_screen();
+        update_screen();
         break;
-    }
 
 #ifdef TOUCH_UI
     case CMD_SHOW_KEYBOARD:
