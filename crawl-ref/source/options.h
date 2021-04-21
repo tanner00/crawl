@@ -618,6 +618,8 @@ public:
     // Fix option values if necessary, specifically file paths.
     void fixup_options();
 
+    map<string, GameOption*> options_by_name;
+
 private:
     string unalias(const string &key) const;
     string expand_vars(const string &field) const;
@@ -669,7 +671,6 @@ private:
     static const string interrupt_prefix;
 
     vector<GameOption*> option_behaviour;
-    map<string, GameOption*> options_by_name;
     const vector<GameOption*> build_options_list();
     map<string, GameOption*> build_options_map(const vector<GameOption*> &opts);
 };

@@ -61,7 +61,8 @@ class BoolGameOption : public GameOption
                    bool _default)
         : GameOption(_names), value(val), default_value(_default) { }
     void reset() const override;
-    void toggle() const override;
+    void toggle() const;
+    bool get() const;
     string loadFromString(const std::string &field, rc_line_type) const override;
 
     private:

@@ -69,6 +69,7 @@ bool read_bool(const string &field, bool def_value)
 
 void BoolGameOption::reset() const { value = default_value; }
 void BoolGameOption::toggle() const { value = !value; }
+bool BoolGameOption::get() const { return value; }
 
 string BoolGameOption::loadFromString(const string &field, rc_line_type) const
 {

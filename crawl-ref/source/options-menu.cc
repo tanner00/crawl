@@ -5,12 +5,12 @@
 #include "options-menu.h"
 #include "options.h"
 #include "ui.h"
-// brendon: options.h added for using Options
 #include "options.h"
+#include "game-options.h"
 
 using namespace ui;
 
-vector<string> booleanOptions = {"restart_after_game", "newgame_after_quit", "autopickup_starting_ammo", "game_seed", "pregen_dungeon", "default_autopickup", "pickup_thrown", "auto_hide_spells", "centre_on_scroll", "symmetric_scroll", "always_show_exclusions", "explore_greedy", "travel_key_stop", "travel_one_unsafe_move"};
+vector<string> booleanOptions = {"newgame_after_quit", "centre_on_scroll", "symmetric_scroll", "explore_greedy", "mouse_input", "sounds_on", "ability_menu"};
 
 // @TODO: Make work with things that are not bools
 formatted_string formatted_option(size_t option_index, bool value, bool highlighted) {
@@ -39,28 +39,32 @@ private:
                 done = true;
                 return done;
             } else if (keyn == CK_ENTER) {
-                // @TODO: toggle (consult game state)
-                Options.options_by_name(booleanOptions[selected_option])->toggle();
-                option_texts[selected_option]->set_text(formatted_option(selected_option, true, true));
+                auto bool_option = dynamic_cast<BoolGameOption*>(Options.options_by_name[booleanOptions[selected_option]]);
+                bool_option->toggle();
+
+                option_texts[selected_option]->set_text(formatted_option(selected_option, bool_option->get(), true));
             } else if (keyn == CK_DOWN) {
-                // @TODO: make the true / false represent current game state
                 // booleanOptions.size():
                 // will need to be changed when we have more options / different menus for options
                 if (selected_option < booleanOptions.size() - 1) {
                     ++selected_option;
                 }
 
-                // consult game state
-                option_texts[selected_option - 1]->set_text(formatted_option(selected_option - 1, false, false));
-                option_texts[selected_option]->set_text(formatted_option(selected_option, false, true));
+                auto last_bool_option = dynamic_cast<BoolGameOption*>(Options.options_by_name[booleanOptions[selected_option - 1]]);
+                auto new_bool_option = dynamic_cast<BoolGameOption*>(Options.options_by_name[booleanOptions[selected_option]]);
+
+                option_texts[selected_option - 1]->set_text(formatted_option(selected_option - 1, last_bool_option->get(), false));
+                option_texts[selected_option]->set_text(formatted_option(selected_option, new_bool_option->get(), true));
             } else if (keyn == CK_UP) {
-                // @TODO: make the true / false represent current game state
                 if (selected_option > 0) {
                     --selected_option;
                 }
 
-                option_texts[selected_option + 1]->set_text(formatted_option(selected_option + 1, false, false));
-                option_texts[selected_option]->set_text(formatted_option(selected_option, false, true));
+                auto last_bool_option = dynamic_cast<BoolGameOption*>(Options.options_by_name[booleanOptions[selected_option + 1]]);
+                auto new_bool_option = dynamic_cast<BoolGameOption*>(Options.options_by_name[booleanOptions[selected_option]]);
+
+                option_texts[selected_option + 1]->set_text(formatted_option(selected_option + 1, last_bool_option->get(), false));
+                option_texts[selected_option]->set_text(formatted_option(selected_option, new_bool_option->get(), true));
             }
 
             return false;
@@ -93,8 +97,9 @@ public:
 
         // @TODO: Make work with all options
         for (size_t i = 0; i < booleanOptions.size(); ++i) {
-            // @TODO: make the true / false represent current game state
-            formatted_string formatted = formatted_option(i, false, i == 0);
+            auto bool_option = dynamic_cast<BoolGameOption*>(Options.options_by_name[booleanOptions[i]]);
+            formatted_string formatted = formatted_option(i, bool_option->get(), i == 0);
+
             auto option_text = make_shared<Text>(formatted);
             option_text->set_margin_for_crt(0, 0, 1, 0);
             option_text->set_margin_for_sdl(0, 0, 10, 0);
