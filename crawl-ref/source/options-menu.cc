@@ -5,6 +5,8 @@
 #include "options-menu.h"
 #include "options.h"
 #include "ui.h"
+// brendon: options.h added for using Options
+#include "options.h"
 
 using namespace ui;
 
@@ -38,6 +40,7 @@ private:
                 return done;
             } else if (keyn == CK_ENTER) {
                 // @TODO: toggle (consult game state)
+                Options.options_by_name(booleanOptions[selected_option])->toggle();
                 option_texts[selected_option]->set_text(formatted_option(selected_option, true, true));
             } else if (keyn == CK_DOWN) {
                 // @TODO: make the true / false represent current game state
