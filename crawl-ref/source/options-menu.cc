@@ -116,3 +116,4 @@ void display_options_menu() {
 
     ui::run_layout(move(popup), options_menu_ui->done);
 }
+
